@@ -1,27 +1,27 @@
-#include "../inc/BluetoothDriver.hpp"
+#include "../inc/bluetoothService.hpp"
 
-BluetoothDriver::BluetoothDriver() {
+BluetoothService::BluetoothService() {
   this->bluetooth = new SoftwareSerial(HC05_TXD, HC05_RXD);
 }
 
-BluetoothDriver::~BluetoothDriver() {
+BluetoothService::~BluetoothService() {
   delete this->bluetooth;
 }
 
-void BluetoothDriver::init() {
+void BluetoothService::init() {
   this->bluetooth->begin(9600);
   pinMode(HC05_STATE, INPUT);
 }
 
-bool BluetoothDriver::isBluetoothConnected() {
+bool BluetoothService::isConnected() {
   return digitalRead(HC05_STATE);
 }
 
-void BluetoothDriver::writeToBluetooth(const char* message) {
+void BluetoothService::write(const char* message) {
   this->bluetooth->write(message);
 }
 
-int BluetoothDriver::getDataFromBluetooth() {
+int BluetoothService::getData() {
   int data = 0;
 
   if (this->bluetooth->available()) {
@@ -41,7 +41,7 @@ int BluetoothDriver::getDataFromBluetooth() {
   return data;
 }
 
-void BluetoothDriver::sendJsonToApp(double* measures) {
+void BluetoothService::sendData(double* measures) {
   // checks the balances measurements
   for (int i = 0; i < NUMBER_OF_BALANCES; ++i) {
     if (measures[i] < 0) {
@@ -51,13 +51,10 @@ void BluetoothDriver::sendJsonToApp(double* measures) {
 
   unsigned long bootTime = millis();
 
-  // char jsonString[256] = "{\"balances\":[{\"id\":1,\"measure\":128.52},{\"id\":2,\"measure\":74.01},{\"id\":3,\"measure\":0}],\"bootTime\":15263221}";
-
+  // builds the data string
   char* str = "Hey \n";
-
   char firstPart[12];
   strcpy(firstPart, "[");
-  // strcpy(firstPart, "{\"balances\":[{\"id\":1,\"measure\":");
 
   char secondPart[12];
   strcpy(secondPart, ",");
