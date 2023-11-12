@@ -8,17 +8,20 @@ IluminationService::~IluminationService() {
 
 void IluminationService::init() {
   pinMode(LED_PIN, OUTPUT);
+  pinMode(DEMUX_SEL_0, OUTPUT);
+  pinMode(DEMUX_SEL_1, OUTPUT);
+  pinMode(DEMUX_SEL_2, OUTPUT);
   this->counter = 0;
 
-  // TIMER0 configuration
-  TCCR0A = (1 << WGM01);  // Set the CTC mode
-  OCR0A = 0xF9;           // ORC0A value for 1ms
-
-  TIMSK0 |= (1 << OCIE0A);  // Set  the interrupt request
-  sei();                    // Enable interrupt
-
-  TCCR0B |= (1 << CS01);  // prescaler 1/64 of internal clock
-  TCCR0B |= (1 << CS00);
+  // Configuração do timer1 
+  TCCR1A = 0;                        //confira timer para operação normal pinos OC1A e OC1B desconectados
+  TCCR1B = 0;                        //limpa registrador
+  TCCR1B |= (1<<CS10)|(1 << CS12);   // configura prescaler para 1024: CS12 = 1 e CS10 = 1
+ 
+  TCNT1 = 0xC2F7;                    // incia timer com valor para que estouro ocorra em 1 segundo
+                                     // 65536-(16MHz/1024/1Hz) = 49911 = 0xC2F7
+  
+  TIMSK1 |= (1 << TOIE1);           // habilita a interrupção do TIMER1
 }
 
 void IluminationService::turnOnLed() {
@@ -35,6 +38,28 @@ int IluminationService::getCounter() {
 
 void IluminationService::setCounter(int counter) {
   this->counter = counter;
+}
+
+void IluminationService::lightLedsByBinaryCode(uint8_t binaryCode) {
+  int firstBit =  (binaryCode >> 0) & 1;
+  int secondBit =  (binaryCode >> 1) & 1;
+  int thirdBit =  (binaryCode >> 2) & 1;
+
+  digitalWrite(DEMUX_SEL_0, firstBit);
+  digitalWrite(DEMUX_SEL_1, secondBit);
+  digitalWrite(DEMUX_SEL_2, thirdBit);
+}
+
+void IluminationService::handleTimerISR() {
+  int currBalance = this->counter % 3;
+  BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
+
+  uint8_t binaryCode = BalanceService::getBinaryCode(currBalance, currBalanceStatus);
+  this->binaryCode = binaryCode;
+
+  this->lightLedsByBinaryCode(binaryCode);
+
+  this->counter = this->counter + 1;
 }
 
 

@@ -1,9 +1,7 @@
 #ifndef MOTION_SERVICE_HPP
 #define MOTION_SERVICE_HPP
 
-#include "Arduino.h"
-
-#define MOTION_SENSOR_INPUT 7
+#include "../main.h"
 
 class MotionService {
 public:

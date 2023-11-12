@@ -1,10 +1,9 @@
 // includes
+#include "main.h"
 #include "inc/BluetoothService.hpp"
 #include "inc/BalanceService.hpp"
 #include "inc/IluminationService.hpp"
 #include "inc/MotionService.hpp"
-
-#define SERIAL_BAUD_RATE 9600
 
 BluetoothService bluetoothService;
 BalanceService balanceService;
@@ -13,13 +12,14 @@ MotionService motionService;
 
 double measures[3] = { 124.5, 21.04, 0 };
 bool state = false;
+int count = 0;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
   // bluetoothService.init();
   // balanceService.init();
-  // iluminationService.init();
-  motionService.init();
+  iluminationService.init();
+  // motionService.init();
 }
 
 void loop() {
@@ -33,26 +33,29 @@ void loop() {
   // double read = balanceService.getMeasurement();
   // Serial.println(read);
 
-  // if (iluminationService.getCounter() == 1000) {
-  //   iluminationService.setCounter(0);
-
-  //   if (state) {
+  // if (iluminationService.getCounter() % 500 == 0) {
   //     iluminationService.turnOnLed();
-  //   } else {
-  //     iluminationService.turnOffLed();
   //   }
 
   //   state = !state;
   // }
 
-  Serial.println(motionService.hasPresence());
+  // BalanceStatus status = iluminationService.status;
+  // if (status == BalanceStatus::FULL_BALANCE) {
+  //   Serial.println("FULL_BALANCE");
+  // } else {
+  //   Serial.println("Failed");
+  // }
+
+  Serial.println(iluminationService.binaryCode);
+
+
+  // Serial.println(motionService.hasPresence());
   // Serial.println("Hello");
-  delay(500);
+  delay(1000);
 }
 
 // ISRs
-// ISR(TIMER0_COMPA_vect) {  // TIMER0 ISR
-//   int currentCounter = iluminationService.getCounter();
-//   iluminationService.setCounter(currentCounter + 1);
-// }
-
+ISR(TIMER1_OVF_vect) {  // TIMER1 ISR
+  iluminationService.handleTimerISR();
+}

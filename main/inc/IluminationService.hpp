@@ -1,9 +1,8 @@
 #ifndef ILUMINATION_SERVICE_HPP
 #define ILUMINATION_SERVICE_HPP
 
-#include "Arduino.h"
-
-#define LED_PIN 6
+#include "../main.h"
+#include "BalanceService.hpp"
 
 class IluminationService {
 public:
@@ -14,6 +13,9 @@ public:
   void turnOffLed();
   int getCounter();
   void setCounter(int);
+  void handleTimerISR();
+  void lightLedsByBinaryCode(uint8_t binaryCode);
+  uint8_t binaryCode;
 
 private:
   int counter;

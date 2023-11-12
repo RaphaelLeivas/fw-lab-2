@@ -21,3 +21,19 @@ double BalanceService::getMeasurement() {
   double rawRead = this->cell->read();
   return getGramsFromRead(rawRead);
 }
+
+static BalanceStatus BalanceService::getBalanceStatus(int balanceNumber) {
+  // TODO: implement logic here
+  return BalanceStatus::FULL_BALANCE;
+}
+
+static uint8_t BalanceService::getBinaryCode(int currBalance, BalanceStatus currBalanceStatus) {
+  if (currBalanceStatus == BalanceStatus::FULL_BALANCE) {
+    return 0b000;
+  } else if (currBalanceStatus == BalanceStatus::HALF_BALANCE) {
+    return 0b001;
+  } else {
+    return 0b010;
+  }
+}
+
