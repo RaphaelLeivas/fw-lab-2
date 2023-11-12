@@ -15,25 +15,42 @@ BalanceService::~BalanceService() {
 
 void BalanceService::init() {
   this->cell->begin(DT, SCK);
+  
+  this->balance1 = 0;
+  this->balance2 = 0;
+  this->balance3 = 0;
+
+  this->bal1FullThreshold = 0;
+  this->bal1HalfThreshold = 0;
+  this->bal2HalfThreshold = 0;
+  this->bal2HalfThreshold = 0;
+  this->bal3HalfThreshold = 0;
+  this->bal3HalfThreshold = 0;
 }
 
 double BalanceService::getMeasurement() {
-  double rawRead = this->cell->read();
-  return getGramsFromRead(rawRead);
+  int rawRead = this->cell->read();
+  double read = getGramsFromRead(rawRead);
+
+  this->balance1 = read;
+  return read;
 }
 
 static BalanceStatus BalanceService::getBalanceStatus(int balanceNumber) {
-  // TODO: implement logic here
-  return BalanceStatus::FULL_BALANCE;
-}
+  // switch (balanceNumber) {
+  //   case 0: { // first balance
+  //     if (this->balance1 >= this->bal1FullThreshold) {
+  //       return BalanceStatus::FULL_BALANCE;
+  //     } else if (this->balance1 >= this->bal1HalfThreshold) {
+  //       return BalanceStatus::HALF_BALANCE;
+  //     } else {
+  //       return BalanceStatus::LOW_BALANCE;
+  //     }
 
-static uint8_t BalanceService::getBinaryCode(int currBalance, BalanceStatus currBalanceStatus) {
-  if (currBalanceStatus == BalanceStatus::FULL_BALANCE) {
-    return 0b000;
-  } else if (currBalanceStatus == BalanceStatus::HALF_BALANCE) {
-    return 0b001;
-  } else {
-    return 0b010;
-  }
+  //     break;
+  //   }
+  // }
+
+  return BalanceStatus::LOW_BALANCE;
 }
 

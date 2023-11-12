@@ -14,6 +14,7 @@ public:
   int getCounter();
   void setCounter(int);
   void handleTimerISR();
+  uint8_t IluminationService::getBinaryCode(int currBalance, BalanceStatus currBalanceStatus);
   void lightLedsByBinaryCode(uint8_t binaryCode);
   uint8_t binaryCode;
 

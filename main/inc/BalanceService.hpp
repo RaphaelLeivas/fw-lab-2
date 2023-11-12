@@ -11,10 +11,22 @@ public:
   void init();
   double getMeasurement();
   static BalanceStatus getBalanceStatus(int balanceNumber);
-  static uint8_t getBinaryCode(int currBalance, BalanceStatus currBalanceStatus);
 
 private:
   HX711* cell = NULL;
+
+  // balance measurements (in grams)
+  double balance1;
+  double balance2;
+  double balance3;
+
+  // balance limits (comes from the app via Bluetooth)
+  double bal1FullThreshold;
+  double bal1HalfThreshold;
+  double bal2FullThreshold;
+  double bal2HalfThreshold;
+  double bal3FullThreshold;
+  double bal3HalfThreshold;
 };
 
 #endif

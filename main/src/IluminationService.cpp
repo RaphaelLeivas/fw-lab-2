@@ -40,6 +40,16 @@ void IluminationService::setCounter(int counter) {
   this->counter = counter;
 }
 
+uint8_t IluminationService::getBinaryCode(int currBalance, BalanceStatus currBalanceStatus) {
+  if (currBalanceStatus == BalanceStatus::FULL_BALANCE) {
+    return 0b000;
+  } else if (currBalanceStatus == BalanceStatus::HALF_BALANCE) {
+    return 0b001;
+  } else {
+    return 0b010;
+  }
+}
+
 void IluminationService::lightLedsByBinaryCode(uint8_t binaryCode) {
   int firstBit =  (binaryCode >> 0) & 1;
   int secondBit =  (binaryCode >> 1) & 1;
@@ -51,10 +61,10 @@ void IluminationService::lightLedsByBinaryCode(uint8_t binaryCode) {
 }
 
 void IluminationService::handleTimerISR() {
-  int currBalance = this->counter % 3;
+  int currBalance = this->counter % 3; 
   BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
 
-  uint8_t binaryCode = BalanceService::getBinaryCode(currBalance, currBalanceStatus);
+  uint8_t binaryCode = this->getBinaryCode(currBalance, currBalanceStatus);
   this->binaryCode = binaryCode;
 
   this->lightLedsByBinaryCode(binaryCode);
