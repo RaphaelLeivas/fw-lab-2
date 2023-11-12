@@ -47,11 +47,17 @@ void loop() {
   //   Serial.println("Failed");
   // }
 
-  Serial.println(iluminationService.binaryCode);
+  // int firstBit =  (iluminationService.binaryCode >> 0) & 1;
+  // int secondBit =  (iluminationService.binaryCode >> 1) & 1;
+  // int thirdBit =  (iluminationService.binaryCode >> 2) & 1;
+
+  // Serial.println(firstBit);
+  // Serial.println(secondBit);
+  // Serial.println(thirdBit);                                                                                                                                                                                                                                                         
 
 
   // Serial.println(motionService.hasPresence());
-  // Serial.println("Hello");
+  Serial.println("Hello");
   delay(1000);
 }
 

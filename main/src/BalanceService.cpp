@@ -51,6 +51,6 @@ static BalanceStatus BalanceService::getBalanceStatus(int balanceNumber) {
   //   }
   // }
 
-  return BalanceStatus::LOW_BALANCE;
+  return BalanceStatus::FULL_BALANCE;
 }
 
