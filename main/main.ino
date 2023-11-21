@@ -12,10 +12,10 @@ MotionService motionService;
 
 double measures[3] = { 124.5, 21.04, 0 };
 bool state = false;
-int count = 0;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
+
   // bluetoothService.init();
   // balanceService.init();
   iluminationService.init();
@@ -23,15 +23,16 @@ void setup() {
 }
 
 void loop() {
-  // if (bluetoothService.isConnected()) {
-  //   // bluetoothService.write("Hello World! \n");
-  //   // bluetoothService.getData();
-
-  //   bluetoothService.sendData(measures);
-  // }
-
   // double read = balanceService.getMeasurement();
   // Serial.println(read);
+
+  // if (bluetoothService.isConnected()) {
+  //   // bluetoothService.write("Hello World! \n");
+  //   bluetoothService.getData();
+
+  //   measures[0] = read;
+  //   bluetoothService.sendData(measures);
+  // }
 
   // if (iluminationService.getCounter() % 500 == 0) {
   //     iluminationService.turnOnLed();
@@ -40,28 +41,19 @@ void loop() {
   //   state = !state;
   // }
 
-  // BalanceStatus status = iluminationService.status;
-  // if (status == BalanceStatus::FULL_BALANCE) {
-  //   Serial.println("FULL_BALANCE");
-  // } else {
-  //   Serial.println("Failed");
-  // }
-
   // int firstBit =  (iluminationService.binaryCode >> 0) & 1;
   // int secondBit =  (iluminationService.binaryCode >> 1) & 1;
   // int thirdBit =  (iluminationService.binaryCode >> 2) & 1;
 
   // Serial.println(firstBit);
   // Serial.println(secondBit);
-  // Serial.println(thirdBit);                                                                                                                                                                                                                                                         
-
-
+  // Serial.println(thirdBit);       
+                                                                                                                                                                                                                                        
   // Serial.println(motionService.hasPresence());
-  Serial.println("Hello");
-  delay(1000);
-}
+  // Serial.println("Hello");
 
-// ISRs
-ISR(TIMER1_OVF_vect) {  // TIMER1 ISR
-  iluminationService.handleTimerISR();
+  int currBalance = 0;
+  BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
+  iluminationService.lightLedsByStatus(currBalance, currBalanceStatus);
+  delay(500);
 }

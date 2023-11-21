@@ -18,15 +18,13 @@ enum class BalanceStatus {
 #define HC05_TXD 4
 #define HC05_RXD 5
 #define HC05_STATE 3
-
 #define BLE_SUBSTRING_SIZE 12
 #define BLE_STRING_SIZE 64
 
 // IluminationService
-#define LED_PIN 6
-#define DEMUX_SEL_0 8
-#define DEMUX_SEL_1 9
-#define DEMUX_SEL_2 10
+#define BAL1_GREEN A3
+#define BAL1_YELLOW A4
+#define BAL1_RED A5
 
 // MotionService
 #define MOTION_SENSOR_INPUT 7

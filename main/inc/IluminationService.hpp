@@ -9,14 +9,7 @@ public:
   IluminationService();
   ~IluminationService();
   void init();
-  void turnOnLed();
-  void turnOffLed();
-  int getCounter();
-  void setCounter(int);
-  void handleTimerISR();
-  uint8_t IluminationService::getBinaryCode(int currBalance, BalanceStatus currBalanceStatus);
-  void lightLedsByBinaryCode(uint8_t binaryCode);
-  uint8_t binaryCode;
+  uint8_t lightLedsByStatus(int currBalance, BalanceStatus currBalanceStatus);
 
 private:
   int counter;
