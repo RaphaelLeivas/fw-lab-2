@@ -13,9 +13,9 @@ BalanceService::~BalanceService() {
   delete this->cell;
 }
 
-void BalanceService::init() {
-  this->cell->begin(DT, SCK);
-  
+void BalanceService::init(int dataPin, int clockPin, int channel) {
+  this->cell->begin(dataPin, clockPin);
+
   this->balance1 = 0;
   this->balance2 = 0;
   this->balance3 = 0;
@@ -26,14 +26,27 @@ void BalanceService::init() {
   this->bal2HalfThreshold = 0;
   this->bal3HalfThreshold = 0;
   this->bal3HalfThreshold = 0;
+
+  this->cell->reset();
+
+  if (channel == CHANNEL_B) {
+    this->cell->set_gain(HX711_CHANNEL_B_GAIN_32);
+  } else {
+    this->cell->set_gain(HX711_CHANNEL_A_GAIN_64);
+  }
 }
 
 double BalanceService::getMeasurement() {
-  int rawRead = this->cell->read();
+  int rawRead = this->cell->read_average(10);
   double read = getGramsFromRead(rawRead);
 
   this->balance1 = read;
   return read;
+}
+
+int BalanceService::getRawMeasurement() {
+  int rawRead = this->cell->read();
+  return rawRead;
 }
 
 static BalanceStatus BalanceService::getBalanceStatus(int balanceNumber) {
@@ -53,4 +66,3 @@ static BalanceStatus BalanceService::getBalanceStatus(int balanceNumber) {
 
   return BalanceStatus::FULL_BALANCE;
 }
-

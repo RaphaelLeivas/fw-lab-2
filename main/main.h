@@ -4,9 +4,13 @@
 #include "Arduino.h"
 
 // BalanceService
-#define DT A1
-#define SCK A0
+#define BAL3_DT A1
+#define BAL3_SCK A0
+#define BAL2_DT A3
+#define BAL2_SCK A2
 #define NUMBER_OF_BALANCES 3
+#define CHANNEL_A 0
+#define CHANNEL_B 1
 
 enum class BalanceStatus {
   FULL_BALANCE = 0, // green LED
@@ -22,7 +26,7 @@ enum class BalanceStatus {
 #define BLE_STRING_SIZE 64
 
 // IluminationService
-#define BAL1_GREEN A3
+#define BAL1_GREEN 13
 #define BAL1_YELLOW A4
 #define BAL1_RED A5
 

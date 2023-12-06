@@ -8,8 +8,9 @@ class BalanceService {
 public:
   BalanceService();
   ~BalanceService();
-  void init();
+  void init(int dataPin, int clockPin, int channel);
   double getMeasurement();
+  int getRawMeasurement();
   static BalanceStatus getBalanceStatus(int balanceNumber);
 
 private:

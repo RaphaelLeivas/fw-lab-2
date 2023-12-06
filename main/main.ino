@@ -5,34 +5,51 @@
 #include "inc/IluminationService.hpp"
 #include "inc/MotionService.hpp"
 
+BalanceService bal2Service;
+BalanceService bal3Service;
+
 BluetoothService bluetoothService;
-BalanceService balanceService;
 IluminationService iluminationService;
 MotionService motionService;
 
-double measures[3] = { 124.5, 21.04, 0 };
+double measures[3] = { 0, 0, 0 };
 bool state = false;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
 
-  // bluetoothService.init();
-  // balanceService.init();
-  iluminationService.init();
+  // initialize all balances
+  bal2Service.init(BAL2_DT, BAL2_SCK, CHANNEL_A);
+  bal3Service.init(BAL3_DT, BAL3_SCK, CHANNEL_B);
+
+  bluetoothService.init();
+  // iluminationService.init();
   // motionService.init();
 }
 
 void loop() {
-  // double read = balanceService.getMeasurement();
-  // Serial.println(read);
+  // reads all balances
+  int read_bal1 = 0;
+  int read_bal2 = bal2Service.getRawMeasurement();
+  // Serial.print("read_bal2: ");
+  // Serial.print(read_bal2);
+  // Serial.print("\n");
+  int read_bal3 = bal3Service.getRawMeasurement();
+  // Serial.print("read_bal3: ");
+  // Serial.print(read_bal3);
+  // Serial.print("\n");
 
-  // if (bluetoothService.isConnected()) {
-  //   // bluetoothService.write("Hello World! \n");
-  //   bluetoothService.getData();
+  measures[0] = read_bal1;
+  measures[1] = read_bal2;
+  measures[2] = read_bal3;
 
-  //   measures[0] = read;
-  //   bluetoothService.sendData(measures);
-  // }
+  // sends data to Bluetooth
+  if (bluetoothService.isConnected()) {
+    bluetoothService.getData();
+    bluetoothService.sendData(measures);
+  }
+
+  // bluetoothService.write("Hello \n");
 
   // if (iluminationService.getCounter() % 500 == 0) {
   //     iluminationService.turnOnLed();
@@ -52,8 +69,8 @@ void loop() {
   // Serial.println(motionService.hasPresence());
   // Serial.println("Hello");
 
-  int currBalance = 0;
-  BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
-  iluminationService.lightLedsByStatus(currBalance, currBalanceStatus);
-  delay(500);
+  // int currBalance = 0;
+  // BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
+  // iluminationService.lightLedsByStatus(currBalance, currBalanceStatus);
+  delay(1000);
 }

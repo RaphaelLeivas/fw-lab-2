@@ -28,13 +28,10 @@ int BluetoothService::getData() {
     data = this->bluetooth->read();
 
     if (data == '1') {
-      Serial.println("LED LIGADO");
+      Serial.println("LEDS ACENDEM");
     }
     if (data == '0') {
-      Serial.println("LED DESLIGADO");
-    }
-    if (data == 'b') {
-      Serial.println("LOOP DO LED ATIVADO");
+      Serial.println("LEDS NAO ACENDEM");
     }
   }
 
