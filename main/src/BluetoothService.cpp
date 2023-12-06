@@ -28,13 +28,10 @@ int BluetoothService::getData() {
     data = this->bluetooth->read();
 
     if (data == '1') {
-      Serial.println("LED LIGADO");
+      Serial.println("LEDS ACENDEM");
     }
     if (data == '0') {
-      Serial.println("LED DESLIGADO");
-    }
-    if (data == 'b') {
-      Serial.println("LOOP DO LED ATIVADO");
+      Serial.println("LEDS NAO ACENDEM");
     }
   }
 
@@ -53,16 +50,16 @@ void BluetoothService::sendData(double* measures) {
 
   // builds the data string
   char* str = "Hey \n";
-  char firstPart[12];
+  char firstPart[BLE_SUBSTRING_SIZE];
   strcpy(firstPart, "[");
 
-  char secondPart[12];
+  char secondPart[BLE_SUBSTRING_SIZE];
   strcpy(secondPart, ",");
 
-  char thirdPart[12];
+  char thirdPart[BLE_SUBSTRING_SIZE];
   strcpy(thirdPart, ",");
 
-  char fourthPart[12];
+  char fourthPart[BLE_SUBSTRING_SIZE];
   strcpy(fourthPart, ",");
 
   dtostrf(measures[0], 2, 2, &firstPart[strlen(firstPart)]);
@@ -70,7 +67,7 @@ void BluetoothService::sendData(double* measures) {
   dtostrf(measures[2], 2, 2, &thirdPart[strlen(thirdPart)]);
   dtostrf(bootTime, 0, 0, &fourthPart[strlen(fourthPart)]);
 
-  char message[64];
+  char message[BLE_STRING_SIZE];
   strcpy(message, "");
 
   strcat(message, firstPart);
