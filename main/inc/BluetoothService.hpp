@@ -12,7 +12,7 @@ public:
   bool isConnected();
   void write(const char*);
   int getData();
-  void sendData(double*);
+  void sendData(double*, bool);
 
 private:
   SoftwareSerial* bluetooth = NULL;

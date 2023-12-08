@@ -38,7 +38,7 @@ int BluetoothService::getData() {
   return data;
 }
 
-void BluetoothService::sendData(double* measures) {
+void BluetoothService::sendData(double* measures, bool presence) {
   // checks the balances measurements
   for (int i = 0; i < NUMBER_OF_BALANCES; ++i) {
     if (measures[i] < 0) {
@@ -62,10 +62,14 @@ void BluetoothService::sendData(double* measures) {
   char fourthPart[BLE_SUBSTRING_SIZE];
   strcpy(fourthPart, ",");
 
+  char fifthPart[BLE_SUBSTRING_SIZE];
+  strcpy(fifthPart, ",");
+
   dtostrf(measures[0], 2, 2, &firstPart[strlen(firstPart)]);
   dtostrf(measures[1], 2, 2, &secondPart[strlen(secondPart)]);
   dtostrf(measures[2], 2, 2, &thirdPart[strlen(thirdPart)]);
   dtostrf(bootTime, 0, 0, &fourthPart[strlen(fourthPart)]);
+  dtostrf(presence, 0, 0, &fifthPart[strlen(fifthPart)]);
 
   char message[BLE_STRING_SIZE];
   strcpy(message, "");
@@ -74,6 +78,7 @@ void BluetoothService::sendData(double* measures) {
   strcat(message, secondPart);
   strcat(message, thirdPart);
   strcat(message, fourthPart);
+  strcat(message, fifthPart);
   strcat(message, "]");
 
   this->bluetooth->write(message);

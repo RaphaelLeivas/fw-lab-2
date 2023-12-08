@@ -24,32 +24,33 @@ void setup() {
 
   bluetoothService.init();
   // iluminationService.init();
-  // motionService.init();
+  motionService.init();
 }
 
 void loop() {
   // reads all balances
   int read_bal1 = 0;
   int read_bal2 = bal2Service.getRawMeasurement();
-  // Serial.print("read_bal2: ");
-  // Serial.print(read_bal2);
-  // Serial.print("\n");
+  Serial.print("read_bal2: ");
+  Serial.print(read_bal2);
+  Serial.print("\n");
   int read_bal3 = bal3Service.getRawMeasurement();
-  // Serial.print("read_bal3: ");
-  // Serial.print(read_bal3);
-  // Serial.print("\n");
+  Serial.print("read_bal3: ");
+  Serial.print(read_bal3);
+  Serial.print("\n");
 
   measures[0] = read_bal1;
   measures[1] = read_bal2;
   measures[2] = read_bal3;
 
+  bool presence = motionService.hasPresence();
+  Serial.println(presence);
+
   // sends data to Bluetooth
   if (bluetoothService.isConnected()) {
     bluetoothService.getData();
-    bluetoothService.sendData(measures);
+    bluetoothService.sendData(measures, presence);
   }
-
-  // bluetoothService.write("Hello \n");
 
   // if (iluminationService.getCounter() % 500 == 0) {
   //     iluminationService.turnOnLed();
@@ -65,12 +66,9 @@ void loop() {
   // Serial.println(firstBit);
   // Serial.println(secondBit);
   // Serial.println(thirdBit);       
-                                                                                                                                                                                                                                        
-  // Serial.println(motionService.hasPresence());
-  // Serial.println("Hello");
-
+                                                                                                                                                                                                                                      
   // int currBalance = 0;
   // BalanceStatus currBalanceStatus = BalanceService::getBalanceStatus(currBalance);
   // iluminationService.lightLedsByStatus(currBalance, currBalanceStatus);
-  delay(1000);
+  delay(1250);
 }

@@ -45,7 +45,7 @@ double BalanceService::getMeasurement() {
 }
 
 int BalanceService::getRawMeasurement() {
-  int rawRead = this->cell->read();
+  int rawRead = this->cell->read_average(5);
   return rawRead;
 }
 
